@@ -1,1 +1,7 @@
 node_modules
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
+.firebaserc
+firebase.json
