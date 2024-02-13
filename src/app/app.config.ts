@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     provideRouter(routes),
     provideHttpClient(),
-    importProvidersFrom(provideFirebaseApp(() => initializeApp({"projectId":"addo24h","appId":"1:744544179520:web:0b31c7c2355cee09ddd6a5","storageBucket":"addo24h.appspot.com","apiKey":"AIzaSyC3EWke0DoTBR5R9YRWY8fOYzBhyAVV-zw","authDomain":"addo24h.firebaseapp.com","messagingSenderId":"744544179520"}))),
+    importProvidersFrom(provideFirebaseApp(() => initializeApp({"projectId":environment.firebase.projectId,"appId":environment.firebase.appId,"storageBucket":environment.firebase.storageBucket,"apiKey":environment.firebase.apiKey,"authDomain":environment.firebase.authDomain,"messagingSenderId":environment.firebase.messagingSenderId}))),
     importProvidersFrom(provideAuth(() => getAuth()))]
 
 };
