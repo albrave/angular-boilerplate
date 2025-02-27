@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { from, mergeMap, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { getAuth, getIdToken } from '@angular/fire/auth';
 
 
 @Injectable({
@@ -21,5 +23,32 @@ export class AuthGuard {
     }
     return true;
   }
+}
+
+
+export function authInterceptor (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) {
+  
+  const auth = getAuth()
+  const { currentUser } = auth;
+  if (currentUser) {
+    return from(getIdToken(currentUser,true)).pipe(
+      mergeMap(token=>{
+        console.log("TOKEN",token);
+        console.log("REQUEST", req.url);
+        if (token) {
+          const cloneReq = req.clone({
+            headers: req.headers.set('Authorization', token)
+          })
+          return next(cloneReq)
+        }
+        return next(req);
+      })
+    )
+  }
+  return next(req);
+
 }
 
